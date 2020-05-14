@@ -18,6 +18,7 @@ const (
 	viperKratosFrontendURL = "kratos.frontend_url"
 	viperKratosAdminURL    = "kratos.admin_url"
 	viperKratosBrowserURL  = "kratos.browser_url"
+	viperJWKsURL           = "jwks_url"
 )
 
 func init() {
@@ -67,4 +68,9 @@ func (v *ViperProvider) KratosAdminURL() string {
 // KratosBrowserURL .
 func (v *ViperProvider) KratosBrowserURL() string {
 	return viperx.GetString(viperKratosBrowserURL, "")
+}
+
+// JWKsURL .
+func (v *ViperProvider) JWKsURL() string {
+	return viperx.GetString(viperJWKsURL, "")
 }

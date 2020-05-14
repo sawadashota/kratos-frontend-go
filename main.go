@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/sawadashota/kratos-gin-frontend/middleware"
+
 	"github.com/gin-gonic/gin"
 	"github.com/gobuffalo/packr/v2"
 	"github.com/sawadashota/kratos-gin-frontend/authentication"
@@ -27,14 +29,17 @@ func compileTemplate() {
 
 func main() {
 	d := driver.NewDefaultDriver()
+	mw := middleware.New(d)
 	router := gin.Default()
 
 	authentication.New(d, router).RegisterRoutes()
 
-	router.GET("/", func(c *gin.Context) {
+	protected := router.Group("/", mw.JWTProtection())
+	protected.GET("/", func(c *gin.Context) {
 		if err := indexHTML.Render(c.Writer, gin.H{}); err != nil {
 			c.AbortWithStatus(http.StatusInternalServerError)
 		}
+
 		c.Status(200)
 	})
 

@@ -11,4 +11,5 @@ type Provider interface {
 	KratosFrontendURL() string
 	KratosAdminURL() string
 	KratosBrowserURL() string
+	JWKsURL() string
 }

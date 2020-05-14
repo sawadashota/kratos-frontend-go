@@ -10,7 +10,7 @@
                     <div class="control">
                         <input class="input"
                                name="{{.Name}}"
-                               pattern="{{.Pattern}}"
+                               {{if .Pattern}} pattern="{{.Pattern}}" {{end}}
                                required="{{.Required}}"
                                type="{{.Type}}"
                                value="{{.Value}}"

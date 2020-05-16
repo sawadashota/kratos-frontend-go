@@ -1,0 +1,35 @@
+{{ define "content" }}
+    <h1 class="title">
+        Edit Account
+    </h1>
+    {{ if .UpdateSuccessful }}
+        <div class="notification is-success">
+            Update Successfully!
+        </div>
+    {{end}}
+    <form action="{{ .Password.Config.Action }}" method="post">
+        {{ range .Password.Config.Fields }}
+            <div class="field">
+                <label class="label">{{.Name}}</label>
+                <div class="control">
+                    <input class="input"
+                           name="{{.Name}}"
+                            {{if .Pattern}} pattern="{{.Pattern}}" {{end}}
+                           required="{{.Required}}"
+                           type="{{.Type}}"
+                           value="{{.Value}}"
+                            {{if .Disabled}} disabled {{end}}
+                    >
+                </div>
+                {{ range .Errors }}
+                    <p class="help is-danger">{{ .Message }}</p>
+                {{ end }}
+            </div>
+        {{ end }}
+        <div class="field is-grouped">
+            <div class="control">
+                <button class="button is-link">Submit</button>
+            </div>
+        </div>
+    </form>
+{{ end }}

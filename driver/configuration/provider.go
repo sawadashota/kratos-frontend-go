@@ -13,6 +13,7 @@ type Provider interface {
 	KratosBrowserURL() string
 	KratosLoginURL() string
 	KratosRegistrationURL() string
+	KratosSettingsURL() string
 	KratosLogoutURL() string
 	JWKsURL() string
 }

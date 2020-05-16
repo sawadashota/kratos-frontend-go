@@ -19,6 +19,7 @@ type Configuration interface {
 	JWKsURL() string
 	KratosLoginURL() string
 	KratosRegistrationURL() string
+	KratosSettingsURL() string
 }
 
 func New(r Registry, c Configuration) *Middleware {

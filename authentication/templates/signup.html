@@ -17,6 +17,9 @@
                                 {{if .Disabled}} disabled {{end}}
                         >
                     </div>
+                    {{ range .Errors }}
+                        <p class="help is-danger">{{ .Message }}</p>
+                    {{ end }}
                 </div>
             {{ end }}
             <div class="field is-grouped">

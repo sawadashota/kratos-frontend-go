@@ -85,6 +85,11 @@ func (v *ViperProvider) KratosRegistrationURL() string {
 	return v.KratosBrowserURL() + "/self-service/browser/flows/registration"
 }
 
+// KratosSettingsURL .
+func (v *ViperProvider) KratosSettingsURL() string {
+	return v.KratosBrowserURL() + "/self-service/browser/flows/settings"
+}
+
 // JWKsURL .
 func (v *ViperProvider) JWKsURL() string {
 	return x.ViperGetString(viperJWKsURL, "")

@@ -7,9 +7,6 @@ SHELL := /bin/bash
 tools: ## install tools
 	go install github.com/pilu/fresh github.com/gobuffalo/packr/v2/packr2
 
-dev: ## start dev mode
-	fresh
-
 start: ## start server
 	packr2
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 GO111MODULE=on go build -o app .

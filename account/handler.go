@@ -3,10 +3,12 @@ package account
 import (
 	"net/http"
 
-	"github.com/gin-gonic/gin"
-	"github.com/gobuffalo/packr/v2"
-	"github.com/sawadashota/kratos-gin-frontend/driver"
 	"github.com/sawadashota/kratos-gin-frontend/middleware"
+	"github.com/sirupsen/logrus"
+
+	"github.com/gorilla/mux"
+
+	"github.com/gobuffalo/packr/v2"
 	"github.com/sawadashota/kratos-gin-frontend/x/htmlpackr"
 )
 
@@ -24,35 +26,43 @@ func compileTemplate() {
 }
 
 type Handler struct {
-	router *gin.Engine
-	d      driver.Driver
-	mw     *middleware.Middleware
+	r Registry
+	c Configuration
 }
 
-func New(d driver.Driver, router *gin.Engine, mw *middleware.Middleware) *Handler {
+type Registry interface {
+	Logger() logrus.FieldLogger
+	Middleware() *middleware.Middleware
+}
+
+type Configuration interface {
+	KratosLogoutURL() string
+}
+
+func New(r Registry, c Configuration) *Handler {
 	return &Handler{
-		router: router,
-		d:      d,
-		mw:     mw,
+		r: r,
+		c: c,
 	}
 }
 
-func (h *Handler) RegisterRoutes() {
-	group := h.router.Group("/", h.mw.JWTProtection())
+func (h *Handler) RegisterRoutes(router *mux.Router) {
+	sub := router.NewRoute().Subrouter()
+	sub.Use(h.r.Middleware().JWTProtection)
 
-	group.GET("/", h.RenderHome)
+	sub.HandleFunc("/", h.RenderHome).Methods(http.MethodGet)
 }
 
-func (h *Handler) RenderHome(c *gin.Context) {
+func (h *Handler) RenderHome(w http.ResponseWriter, _ *http.Request) {
 	htmlValues := struct {
 		LogoutURL string
 	}{
-		LogoutURL: h.d.Configuration().KratosLogoutURL(),
+		LogoutURL: h.c.KratosLogoutURL(),
 	}
 
-	if err := homeHTML.Render(c.Writer, &htmlValues); err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
+	if err := homeHTML.Render(w, &htmlValues); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
 	}
 
-	c.Status(200)
+	w.WriteHeader(http.StatusOK)
 }

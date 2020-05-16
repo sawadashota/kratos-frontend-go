@@ -2,24 +2,19 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 
-	"github.com/gin-gonic/gin"
-	"github.com/sawadashota/kratos-gin-frontend/account"
-	"github.com/sawadashota/kratos-gin-frontend/authentication"
+	"github.com/gorilla/mux"
 	"github.com/sawadashota/kratos-gin-frontend/driver"
-	"github.com/sawadashota/kratos-gin-frontend/middleware"
 	"github.com/sirupsen/logrus"
 )
 
 func main() {
 	d := driver.NewDefaultDriver()
-	mw := middleware.New(d)
-	router := gin.Default()
+	router := mux.NewRouter()
+	d.Registry().RegisterRoutes(router)
 
-	authentication.New(d, router).RegisterRoutes()
-	account.New(d, router, mw).RegisterRoutes()
-
-	if err := router.Run(fmt.Sprintf(":%d", d.Configuration().Port())); err != nil {
+	if err := http.ListenAndServe(fmt.Sprintf(":%d", d.Configuration().Port()), router); err != nil {
 		logrus.Fatalf("fail to staring server: %s", err)
 	}
 }

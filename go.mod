@@ -5,9 +5,8 @@ go 1.14
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
-	github.com/gin-gonic/gin v1.6.3
 	github.com/gobuffalo/packr/v2 v2.8.0
-	github.com/golang/protobuf v1.4.1 // indirect
+	github.com/gorilla/mux v1.7.4
 	github.com/mitchellh/mapstructure v1.3.0
 	github.com/ory/kratos-client-go v0.2.1-alpha.1
 	github.com/pelletier/go-toml v1.7.0 // indirect

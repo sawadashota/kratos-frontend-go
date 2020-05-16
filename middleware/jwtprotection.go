@@ -4,45 +4,32 @@ import (
 	"net/http"
 
 	"github.com/sawadashota/kratos-gin-frontend/x/jwttoken"
-
-	"github.com/gin-gonic/gin"
-	"github.com/sawadashota/kratos-gin-frontend/driver"
 )
 
-type Middleware struct {
-	d driver.Driver
-}
-
-func New(d driver.Driver) *Middleware {
-	return &Middleware{
-		d: d,
-	}
-}
-
-func (m *Middleware) JWTProtection() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		token, err := jwttoken.ParseRequest(c.Request, m.d.Configuration().JWKsURL())
+func (m *Middleware) JWTProtection(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		token, err := jwttoken.ParseRequest(r, m.c.JWKsURL())
 
 		if err != nil {
-			m.d.Registry().Logger().Infof("fail to authentication: %s", err)
-			c.AbortWithStatus(http.StatusInternalServerError)
+			m.r.Logger().Infof("fail to authentication: %s", err)
+			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 		if !token.Valid {
-			m.d.Registry().Logger().Info("token is invalid")
-			c.AbortWithStatus(http.StatusUnauthorized)
+			m.r.Logger().Info("token is invalid")
+			w.WriteHeader(http.StatusUnauthorized)
 			return
 		}
 
 		claims, err := jwttoken.ParseTokenClaims(token.Claims)
 		if err != nil {
-			m.d.Registry().Logger().Error(err)
-			c.AbortWithStatus(http.StatusUnauthorized)
+			m.r.Logger().Error(err)
+			w.WriteHeader(http.StatusUnauthorized)
 			return
 		}
-		m.d.Registry().Logger().Debugf("claims raw: %v", token.Claims)
-		m.d.Registry().Logger().Debugf("claims: %v", claims)
+		m.r.Logger().Debugf("claims raw: %v", token.Claims)
+		m.r.Logger().Debugf("claims: %v", claims)
 
-		c.Next()
-	}
+		next.ServeHTTP(w, r)
+	})
 }

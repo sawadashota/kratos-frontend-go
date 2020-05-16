@@ -23,7 +23,7 @@ func init() {
 }
 
 func compileTemplate() {
-	box := htmlpackr.New(packr.New("Authentication HTML templates", "./templates"))
+	box := htmlpackr.New(packr.New("authentication", "./templates"))
 	signInHTML = box.MustParseHTML("signin", "layout.html", "signin.html")
 	signUpHTML = box.MustParseHTML("signup", "layout.html", "signup.html")
 }
@@ -52,9 +52,9 @@ func (h *Handler) ValidateRequest(c *gin.Context) {
 	if requestCode == "" {
 		base := filepath.Base(c.Request.URL.Path)
 		if base == "login" {
-			c.Redirect(http.StatusFound, h.d.Configuration().KratosBrowserURL()+"/self-service/browser/flows/login")
+			c.Redirect(http.StatusFound, h.d.Configuration().KratosLoginURL())
 		}
-		c.Redirect(http.StatusFound, h.d.Configuration().KratosBrowserURL()+"/self-service/browser/flows/registration")
+		c.Redirect(http.StatusFound, h.d.Configuration().KratosRegistrationURL())
 	}
 }
 
@@ -64,7 +64,7 @@ func (h *Handler) RenderSignInForm(c *gin.Context) {
 	res, err := h.d.Registry().KratosClient().Common.GetSelfServiceBrowserLoginRequest(params)
 	if err != nil {
 		h.d.Registry().Logger().Errorf("fail to get login request from kratos: %s", err)
-		c.Redirect(http.StatusFound, h.d.Configuration().KratosBrowserURL()+"/self-service/browser/flows/login")
+		c.Redirect(http.StatusFound, h.d.Configuration().KratosLoginURL())
 		return
 	}
 	if res.Error() == "" {
@@ -93,7 +93,7 @@ func (h *Handler) RenderSignUpForm(c *gin.Context) {
 	res, err := h.d.Registry().KratosClient().Common.GetSelfServiceBrowserRegistrationRequest(params)
 	if err != nil {
 		h.d.Registry().Logger().Errorf("fail to get registration request from kratos: %s", err)
-		c.Redirect(http.StatusFound, h.d.Configuration().KratosBrowserURL()+"/self-service/browser/flows/registration")
+		c.Redirect(http.StatusFound, h.d.Configuration().KratosRegistrationURL())
 		return
 	}
 	if res.Error() == "" {

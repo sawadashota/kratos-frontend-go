@@ -70,6 +70,21 @@ func (v *ViperProvider) KratosBrowserURL() string {
 	return viperx.GetString(viperKratosBrowserURL, "")
 }
 
+// KratosLogoutURL .
+func (v *ViperProvider) KratosLogoutURL() string {
+	return v.KratosBrowserURL() + "/self-service/browser/flows/logout"
+}
+
+// KratosLoginURL .
+func (v *ViperProvider) KratosLoginURL() string {
+	return v.KratosBrowserURL() + "/self-service/browser/flows/login"
+}
+
+// KratosRegistrationURL .
+func (v *ViperProvider) KratosRegistrationURL() string {
+	return v.KratosBrowserURL() + "/self-service/browser/flows/registration"
+}
+
 // JWKsURL .
 func (v *ViperProvider) JWKsURL() string {
 	return viperx.GetString(viperJWKsURL, "")

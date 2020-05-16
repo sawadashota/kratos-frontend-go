@@ -15,7 +15,7 @@ selfservice:
     return_to: http://127.0.0.1:4455/
 
   logout:
-    redirect_to: http://127.0.0.1:4455/auth/login
+    redirect_to: http://127.0.0.1:4455/auth/signin
 
   login:
     request_lifespan: 10m

@@ -5,7 +5,7 @@ SHELL := /bin/bash
 .PHONY: $(shell grep -h -E '^[a-zA-Z_-]+:' $(MAKEFILE_LIST) | sed 's/://')
 
 tools: ## install tools
-	go install github.com/pilu/fresh github.com/gobuffalo/packr/v2/packr2
+	go install github.com/gobuffalo/packr/v2/packr2
 
 start: ## start server
 	packr2

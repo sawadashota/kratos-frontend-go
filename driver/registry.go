@@ -3,10 +3,11 @@ package driver
 import (
 	"github.com/gorilla/mux"
 	"github.com/ory/kratos-client-go/client"
-	"github.com/sawadashota/kratos-gin-frontend/account"
-	"github.com/sawadashota/kratos-gin-frontend/authentication"
-	"github.com/sawadashota/kratos-gin-frontend/driver/configuration"
-	"github.com/sawadashota/kratos-gin-frontend/middleware"
+	"github.com/sawadashota/kratos-frontend-go/account"
+	"github.com/sawadashota/kratos-frontend-go/authentication"
+	"github.com/sawadashota/kratos-frontend-go/driver/configuration"
+	"github.com/sawadashota/kratos-frontend-go/internal/jwt"
+	"github.com/sawadashota/kratos-frontend-go/middleware"
 	"github.com/sirupsen/logrus"
 )
 
@@ -14,6 +15,7 @@ import (
 type Registry interface {
 	Logger() logrus.FieldLogger
 
+	JWTParser() *jwt.Parser
 	Middleware() *middleware.Middleware
 	KratosClient() *client.OryKratos
 

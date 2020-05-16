@@ -4,14 +4,12 @@ import (
 	"net/url"
 
 	"github.com/gorilla/mux"
-
-	"github.com/sawadashota/kratos-gin-frontend/account"
-	"github.com/sawadashota/kratos-gin-frontend/authentication"
-
-	"github.com/sawadashota/kratos-gin-frontend/middleware"
-
 	"github.com/ory/kratos-client-go/client"
-	"github.com/sawadashota/kratos-gin-frontend/driver/configuration"
+	"github.com/sawadashota/kratos-frontend-go/account"
+	"github.com/sawadashota/kratos-frontend-go/authentication"
+	"github.com/sawadashota/kratos-frontend-go/driver/configuration"
+	"github.com/sawadashota/kratos-frontend-go/internal/jwt"
+	"github.com/sawadashota/kratos-frontend-go/middleware"
 	"github.com/sirupsen/logrus"
 )
 
@@ -23,12 +21,20 @@ type RegistryDefault struct {
 	c configuration.Provider
 	r Registry
 
-	mw *middleware.Middleware
+	jwtParser *jwt.Parser
+	mw        *middleware.Middleware
 
 	kratosClient *client.OryKratos
 
 	authenticationHandler *authentication.Handler
 	accountHandler        *account.Handler
+}
+
+func (r *RegistryDefault) JWTParser() *jwt.Parser {
+	if r.jwtParser == nil {
+		r.jwtParser = jwt.New(r, r.c)
+	}
+	return r.jwtParser
 }
 
 func (r *RegistryDefault) AccountHandler() *account.Handler {

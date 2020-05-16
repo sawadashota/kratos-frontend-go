@@ -21,10 +21,10 @@
     - handler: noop
 
 -
-  id: "sawadashota:kratos-gin-frontend:anonymous"
+  id: "sawadashota:frontend:anonymous"
   upstream:
     preserve_host: true
-    url: "http://gin:4435"
+    url: "http://frontend:4435"
   match:
     url: "http://127.0.0.1:4455/<{error,verify,auth/*,**.css,**.js}{/,}>"
     methods:
@@ -39,10 +39,10 @@
       handler: noop
 
 -
-  id: "sawadashota:kratos-gin-frontend:protected"
+  id: "sawadashota:frontend:protected"
   upstream:
     preserve_host: true
-    url: "http://gin:4435"
+    url: "http://frontend:4435"
   match:
     url: "http://127.0.0.1:4455/<{,debug,dashboard,settings}>"
     methods:

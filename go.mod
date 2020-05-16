@@ -1,4 +1,4 @@
-module github.com/sawadashota/kratos-gin-frontend
+module github.com/sawadashota/kratos-frontend-go
 
 go 1.14
 

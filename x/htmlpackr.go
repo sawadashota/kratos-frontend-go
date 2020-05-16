@@ -1,4 +1,4 @@
-package htmlpackr
+package x
 
 import (
 	"html/template"
@@ -11,7 +11,7 @@ type Box struct {
 	box *packr.Box
 }
 
-func New(box *packr.Box) *Box {
+func NewBox(box *packr.Box) *Box {
 	return &Box{
 		box: box,
 	}

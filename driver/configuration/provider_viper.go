@@ -3,7 +3,7 @@ package configuration
 import (
 	"strings"
 
-	"github.com/sawadashota/kratos-gin-frontend/x/viperx"
+	"github.com/sawadashota/kratos-frontend-go/x"
 	"github.com/spf13/viper"
 )
 
@@ -32,42 +32,42 @@ func NewViperProvider() Provider {
 
 // AppEnv .
 func (v *ViperProvider) AppEnv() string {
-	return viperx.GetString(viperAppEnv, "production")
+	return x.ViperGetString(viperAppEnv, "production")
 }
 
 // Port .
 func (v *ViperProvider) Port() int {
-	return viperx.GetInt(viperPort, 8080)
+	return x.ViperGetInt(viperPort, 8080)
 }
 
 // LogLevel .
 func (v *ViperProvider) LogLevel() string {
-	return viperx.GetString(viperLogLevel, "debug")
+	return x.ViperGetString(viperLogLevel, "debug")
 }
 
 // LogFormat .
 func (v *ViperProvider) LogFormat() string {
-	return viperx.GetString(viperLogFormat, "")
+	return x.ViperGetString(viperLogFormat, "")
 }
 
 // CSRFSecret .
 func (v *ViperProvider) CSRFSecret() string {
-	return viperx.GetString(viperCSRFSecret, "cVWPNmk!9s.bvG_4Aq6Wn-fsF9jTN7jPWDxGnUhPd6!@mmQJoi")
+	return x.ViperGetString(viperCSRFSecret, "cVWPNmk!9s.bvG_4Aq6Wn-fsF9jTN7jPWDxGnUhPd6!@mmQJoi")
 }
 
 // KratosFrontendURL .
 func (v *ViperProvider) KratosFrontendURL() string {
-	return viperx.GetString(viperKratosFrontendURL, "")
+	return x.ViperGetString(viperKratosFrontendURL, "")
 }
 
 // KratosAdminURL .
 func (v *ViperProvider) KratosAdminURL() string {
-	return viperx.GetString(viperKratosAdminURL, "")
+	return x.ViperGetString(viperKratosAdminURL, "")
 }
 
 // KratosBrowserURL .
 func (v *ViperProvider) KratosBrowserURL() string {
-	return viperx.GetString(viperKratosBrowserURL, "")
+	return x.ViperGetString(viperKratosBrowserURL, "")
 }
 
 // KratosLogoutURL .
@@ -87,5 +87,5 @@ func (v *ViperProvider) KratosRegistrationURL() string {
 
 // JWKsURL .
 func (v *ViperProvider) JWKsURL() string {
-	return viperx.GetString(viperJWKsURL, "")
+	return x.ViperGetString(viperJWKsURL, "")
 }

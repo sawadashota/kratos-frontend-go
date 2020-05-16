@@ -3,8 +3,10 @@ package authentication
 import (
 	"net/http"
 
+	"github.com/sawadashota/kratos-frontend-go/x"
+
 	"github.com/ory/kratos-client-go/client"
-	"github.com/sawadashota/kratos-gin-frontend/middleware"
+	"github.com/sawadashota/kratos-frontend-go/middleware"
 	"github.com/sirupsen/logrus"
 
 	"github.com/gorilla/mux"
@@ -13,12 +15,11 @@ import (
 
 	"github.com/gobuffalo/packr/v2"
 	"github.com/ory/kratos-client-go/client/common"
-	"github.com/sawadashota/kratos-gin-frontend/x/htmlpackr"
 )
 
 var (
-	signInHTML *htmlpackr.HTMLTemplate
-	signUpHTML *htmlpackr.HTMLTemplate
+	signInHTML *x.HTMLTemplate
+	signUpHTML *x.HTMLTemplate
 )
 
 func init() {
@@ -26,7 +27,7 @@ func init() {
 }
 
 func compileTemplate() {
-	box := htmlpackr.New(packr.New("authentication", "./templates"))
+	box := x.NewBox(packr.New("authentication", "./templates"))
 	signInHTML = box.MustParseHTML("signin", "layout.html", "signin.html")
 	signUpHTML = box.MustParseHTML("signup", "layout.html", "signup.html")
 }
@@ -88,7 +89,6 @@ func (h *Handler) RenderSignInForm(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	w.WriteHeader(http.StatusOK)
 }
 
 func (h *Handler) RenderSignUpForm(w http.ResponseWriter, r *http.Request) {
@@ -117,5 +117,4 @@ func (h *Handler) RenderSignUpForm(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	w.WriteHeader(http.StatusOK)
 }

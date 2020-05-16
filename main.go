@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/sawadashota/kratos-gin-frontend/driver"
+	"github.com/sawadashota/kratos-frontend-go/driver"
 	"github.com/sirupsen/logrus"
 )
 

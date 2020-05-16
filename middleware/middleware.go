@@ -1,6 +1,9 @@
 package middleware
 
-import "github.com/sirupsen/logrus"
+import (
+	"github.com/sawadashota/kratos-frontend-go/internal/jwt"
+	"github.com/sirupsen/logrus"
+)
 
 type Middleware struct {
 	r Registry
@@ -9,6 +12,7 @@ type Middleware struct {
 
 type Registry interface {
 	Logger() logrus.FieldLogger
+	JWTParser() *jwt.Parser
 }
 
 type Configuration interface {

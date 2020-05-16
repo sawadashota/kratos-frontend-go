@@ -1,19 +1,18 @@
 package account
 
 import (
+	"encoding/json"
 	"net/http"
 
-	"github.com/sawadashota/kratos-gin-frontend/middleware"
-	"github.com/sirupsen/logrus"
-
-	"github.com/gorilla/mux"
-
 	"github.com/gobuffalo/packr/v2"
-	"github.com/sawadashota/kratos-gin-frontend/x/htmlpackr"
+	"github.com/gorilla/mux"
+	"github.com/sawadashota/kratos-frontend-go/middleware"
+	"github.com/sawadashota/kratos-frontend-go/x"
+	"github.com/sirupsen/logrus"
 )
 
 var (
-	homeHTML *htmlpackr.HTMLTemplate
+	homeHTML *x.HTMLTemplate
 )
 
 func init() {
@@ -21,7 +20,7 @@ func init() {
 }
 
 func compileTemplate() {
-	box := htmlpackr.New(packr.New("account", "./templates"))
+	box := x.NewBox(packr.New("account", "./templates"))
 	homeHTML = box.MustParseHTML("home", "layout.html", "home.html")
 }
 
@@ -37,6 +36,7 @@ type Registry interface {
 
 type Configuration interface {
 	KratosLogoutURL() string
+	JWKsURL() string
 }
 
 func New(r Registry, c Configuration) *Handler {
@@ -53,16 +53,31 @@ func (h *Handler) RegisterRoutes(router *mux.Router) {
 	sub.HandleFunc("/", h.RenderHome).Methods(http.MethodGet)
 }
 
-func (h *Handler) RenderHome(w http.ResponseWriter, _ *http.Request) {
+func (h *Handler) RenderHome(w http.ResponseWriter, r *http.Request) {
+	claims, err := middleware.GetClaimsFromContext(r)
+	if err != nil {
+		h.r.Logger().Error(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	claimsJSON, err := json.MarshalIndent(claims, "", "  ")
+	if err != nil {
+		h.r.Logger().Errorf("fail to marshal claims: %s", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
 	htmlValues := struct {
-		LogoutURL string
+		LogoutURL  string
+		ClaimsJSON string
 	}{
-		LogoutURL: h.c.KratosLogoutURL(),
+		LogoutURL:  h.c.KratosLogoutURL(),
+		ClaimsJSON: string(claimsJSON),
 	}
 
 	if err := homeHTML.Render(w, &htmlValues); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
-
-	w.WriteHeader(http.StatusOK)
 }

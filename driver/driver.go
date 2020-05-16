@@ -1,6 +1,6 @@
 package driver
 
-import "github.com/sawadashota/kratos-gin-frontend/driver/configuration"
+import "github.com/sawadashota/kratos-frontend-go/driver/configuration"
 
 type Driver interface {
 	Configuration() configuration.Provider

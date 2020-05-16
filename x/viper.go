@@ -1,8 +1,8 @@
-package viperx
+package x
 
 import "github.com/spf13/viper"
 
-func GetString(key, fallback string) string {
+func ViperGetString(key, fallback string) string {
 	v := viper.GetString(key)
 
 	if len(v) == 0 {
@@ -12,7 +12,7 @@ func GetString(key, fallback string) string {
 	return v
 }
 
-func GetInt(key string, fallback int) int {
+func ViperGetInt(key string, fallback int) int {
 	v := viper.GetInt(key)
 
 	if v == 0 {

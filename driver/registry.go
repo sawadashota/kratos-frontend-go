@@ -8,6 +8,7 @@ import (
 	"github.com/sawadashota/kratos-frontend-go/driver/configuration"
 	"github.com/sawadashota/kratos-frontend-go/internal/jwt"
 	"github.com/sawadashota/kratos-frontend-go/middleware"
+	"github.com/sawadashota/kratos-frontend-go/salary"
 	"github.com/sirupsen/logrus"
 )
 
@@ -21,6 +22,7 @@ type Registry interface {
 
 	AccountHandler() *account.Handler
 	AuthenticationHandler() *authentication.Handler
+	SalaryHandler() *salary.Handler
 	RegisterRoutes(router *mux.Router)
 }
 

@@ -20,6 +20,7 @@ type Configuration interface {
 	KratosLoginURL() string
 	KratosRegistrationURL() string
 	KratosSettingsURL() string
+	OPAPolicyURL() string
 }
 
 func New(r Registry, c Configuration) *Middleware {

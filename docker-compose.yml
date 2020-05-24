@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.8"
 
 services:
   frontend:
@@ -9,6 +9,7 @@ services:
       KRATOS_ADMIN_URL: "http://kratos:4434/"
       KRATOS_BROWSER_URL: "http://127.0.0.1:4455/.ory/kratos/public"
       JWKS_URL: "http://oathkeeper:4456/.well-known/jwks.json"
+      OPA_POLICY_URL: "http://opa:8181/v1/data/frontend"
     networks:
       - intranet
     ports:
@@ -18,6 +19,22 @@ services:
     restart: on-failure
     command: /app
 
+  # https://www.openpolicyagent.org/docs/latest/http-api-authorization/
+  opa:
+    image: openpolicyagent/opa:latest
+    ports:
+      - 8181:8181
+    networks:
+      - intranet
+    volumes:
+      - ./policies/frontend:/policies
+    command:
+      - "run"
+      - "--server"
+      - "--log-format=json-pretty"
+      - "--set=decision_logs.console=true"
+      - "/policies"
+
   oathkeeper:
     image: oryd/oathkeeper:v0.38.1
     depends_on:
@@ -25,8 +42,7 @@ services:
     ports:
       - "4455:4455"
       - "4456:4456"
-    command:
-      serve proxy -c "/etc/config/oathkeeper/.oathkeeper.yml"
+    command: serve proxy -c "/etc/config/oathkeeper/.oathkeeper.yml"
     environment:
       - LOG_LEVEL=debug
     restart: on-failure
@@ -49,8 +65,7 @@ services:
       - type: bind
         source: ./contrib/quickstart/kratos/email-password
         target: /etc/config/kratos
-    command:
-      -c /etc/config/kratos/.kratos.yml migrate sql -e --yes
+    command: -c /etc/config/kratos/.kratos.yml migrate sql -e --yes
     restart: on-failure
     networks:
       - intranet
@@ -65,8 +80,7 @@ services:
     restart: unless-stopped
     environment:
       - DSN=sqlite:///var/lib/sqlite/db.sqlite?_fk=true
-    command:
-      serve -c /etc/config/kratos/.kratos.yml --dev
+    command: serve -c /etc/config/kratos/.kratos.yml --dev
     volumes:
       - type: volume
         source: kratos-sqlite

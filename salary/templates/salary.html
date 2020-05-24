@@ -1,0 +1,13 @@
+{{ define "content" }}
+    <h1 class="title">
+        My Salary
+    </h1>
+    <table class="table">
+        <tbody>
+        <tr>
+            <th>Salary</th>
+            <td>{{ .Salary.Annual }} {{ .Salary.Currency }}</td>
+        </tr>
+        </tbody>
+    </table>
+{{ end }}

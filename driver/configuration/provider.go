@@ -16,4 +16,5 @@ type Provider interface {
 	KratosSettingsURL() string
 	KratosLogoutURL() string
 	JWKsURL() string
+	OPAPolicyURL() string
 }

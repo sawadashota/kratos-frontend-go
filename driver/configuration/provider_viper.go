@@ -19,6 +19,7 @@ const (
 	viperKratosAdminURL    = "kratos.admin_url"
 	viperKratosBrowserURL  = "kratos.browser_url"
 	viperJWKsURL           = "jwks_url"
+	viperOPAPolicyURL           = "opa.policy_url"
 )
 
 func init() {
@@ -93,4 +94,9 @@ func (v *ViperProvider) KratosSettingsURL() string {
 // JWKsURL .
 func (v *ViperProvider) JWKsURL() string {
 	return x.ViperGetString(viperJWKsURL, "")
+}
+
+// OPAPolicyURL .
+func (v *ViperProvider) OPAPolicyURL() string {
+	return x.ViperGetString(viperOPAPolicyURL, "")
 }

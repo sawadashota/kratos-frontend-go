@@ -3,6 +3,8 @@ package driver
 import (
 	"net/url"
 
+	"github.com/sawadashota/kratos-frontend-go/salary"
+
 	"github.com/gorilla/mux"
 	"github.com/ory/kratos-client-go/client"
 	"github.com/sawadashota/kratos-frontend-go/account"
@@ -28,6 +30,7 @@ type RegistryDefault struct {
 
 	authenticationHandler *authentication.Handler
 	accountHandler        *account.Handler
+	salaryHandler         *salary.Handler
 }
 
 func (r *RegistryDefault) JWTParser() *jwt.Parser {
@@ -50,10 +53,17 @@ func (r *RegistryDefault) AuthenticationHandler() *authentication.Handler {
 	}
 	return r.authenticationHandler
 }
+func (r *RegistryDefault) SalaryHandler() *salary.Handler {
+	if r.salaryHandler == nil {
+		r.salaryHandler = salary.New(r, r.c)
+	}
+	return r.salaryHandler
+}
 
 func (r *RegistryDefault) RegisterRoutes(router *mux.Router) {
 	r.AuthenticationHandler().RegisterRoutes(router)
 	r.AccountHandler().RegisterRoutes(router)
+	r.SalaryHandler().RegisterRoutes(router)
 }
 
 func NewRegistryDefault(c configuration.Provider) *RegistryDefault {

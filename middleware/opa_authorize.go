@@ -10,14 +10,21 @@ import (
 func (m *Middleware) Authorize(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		claims, err := GetClaimsFromContext(r)
+		if err != nil {
+			m.r.Logger().Error(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
 		path := strings.Split(strings.Trim(r.URL.Path, "/"), "/")
-
 		m.r.Logger().Infof("request from %s", claims.Sub)
 
+		token := strings.Split(r.Header.Get("authorization"), " ")[1]
+		m.r.Logger().Debug(token)
 		type Input struct {
 			Method string   `json:"method"`
 			User   string   `json:"user"`
 			Path   []string `json:"path"`
+			Token  string   `json:"token"`
 		}
 		input := struct {
 			Input Input `json:"input"`
@@ -26,6 +33,7 @@ func (m *Middleware) Authorize(next http.Handler) http.Handler {
 				Method: r.Method,
 				User:   claims.Sub,
 				Path:   path,
+				Token:  token,
 			},
 		}
 
@@ -36,7 +44,7 @@ func (m *Middleware) Authorize(next http.Handler) http.Handler {
 			return
 		}
 
-		req, err := http.NewRequest(http.MethodPost, "http://opa:8181/v1/data/frontend", bytes.NewBuffer(b))
+		req, err := http.NewRequest(http.MethodPost, m.c.OPAPolicyURL(), bytes.NewBuffer(b))
 		if err != nil {
 			m.r.Logger().Error(err)
 			w.WriteHeader(http.StatusInternalServerError)

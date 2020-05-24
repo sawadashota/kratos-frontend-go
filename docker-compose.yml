@@ -33,6 +33,7 @@ services:
       - "--server"
       - "--log-format=json-pretty"
       - "--set=decision_logs.console=true"
+      - "--log-level=debug"
       - "/policies"
 
   oathkeeper:

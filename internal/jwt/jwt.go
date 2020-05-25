@@ -50,9 +50,9 @@ func (p *Parser) ParseTokenClaims(claims interface{}) (*Claims, error) {
 }
 
 type Claims struct {
-	Exp     uint    `json:"exp" mapstructure:"exp"`
-	Iat     uint    `json:"iat" mapstructure:"iat"`
-	Nbf     uint    `json:"nbf" mapstructure:"nbf"`
+	Exp     int64   `json:"exp" mapstructure:"exp"`
+	Iat     int64   `json:"iat" mapstructure:"iat"`
+	Nbf     int64   `json:"nbf" mapstructure:"nbf"`
 	Iss     string  `json:"iss" mapstructure:"iss"`
 	Jti     string  `json:"jti" mapstructure:"jti"`
 	Sub     string  `json:"sub" mapstructure:"sub"`
@@ -84,6 +84,11 @@ type Address struct {
 	Value     string    `json:"value" mapstructure:"value"`
 	Verified  bool      `json:"verified" mapstructure:"verified"`
 	Via       string    `json:"via" mapstructure:"via"`
+}
+
+func (c *Claims) IsExpired() bool {
+	now := time.Now()
+	return now.Unix() >= c.Exp || now.After(c.Session.ExpiresAt)
 }
 
 func (p *Parser) ParseRequest(req *http.Request) (*jwt.Token, error) {

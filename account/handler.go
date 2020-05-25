@@ -55,7 +55,7 @@ func New(r Registry, c Configuration) *Handler {
 
 func (h *Handler) RegisterRoutes(router *mux.Router) {
 	sub := router.NewRoute().Subrouter()
-	sub.Use(h.r.Middleware().JWTProtection)
+	sub.Use(h.r.Middleware().Authorize)
 
 	sub.HandleFunc("/", h.RenderHome).Methods(http.MethodGet)
 

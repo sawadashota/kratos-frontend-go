@@ -46,7 +46,7 @@ func New(r Registry, c Configuration) *Handler {
 
 func (h *Handler) RegisterRoutes(router *mux.Router) {
 	sub := router.NewRoute().Subrouter()
-	sub.Use(h.r.Middleware().JWTProtection, h.r.Middleware().Authorize)
+	sub.Use(h.r.Middleware().Authorize)
 
 	sub.HandleFunc("/my/salary", h.RenderSalary).Methods(http.MethodGet)
 }

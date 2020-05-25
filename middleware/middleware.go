@@ -20,6 +20,7 @@ type Configuration interface {
 	KratosLoginURL() string
 	KratosRegistrationURL() string
 	KratosSettingsURL() string
+	KratosLogoutURL() string
 	OPAPolicyURL() string
 }
 
